@@ -20,7 +20,7 @@ export default function VerifyEmailPage() {
     setLoading(true);
     try {
       await api.verifyEmail({ email, code });
-      addToast("Email verified!", "success");
+      addToast("Email verified successfully.", "success");
       navigate("/login");
     } catch (err) {
       addToast(err.message, "error");
@@ -31,19 +31,44 @@ export default function VerifyEmailPage() {
 
   return (
     <AuthLayout>
-      <FormCard title="Verify Email" subtitle="One last step to secure your account">
-        <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <div style={{ fontSize: 64, marginBottom: 16 }}>📧</div>
-          <p style={{ color: "#94a3b8", fontSize: 15, lineHeight: 1.6, marginBottom: 24 }}>
-            A verification code has been sent to
-            <br />
-            <strong style={{ color: "#a78bfa" }}>{email || "your email"}</strong>
-          </p>
-          <div style={{ marginBottom: 16, textAlign: "left" }}>
-            <InputField label="Verification Code" value={code} onChange={setCode} placeholder="6-digit code" icon="🔢" required />
+      <FormCard title="Verify your email" subtitle="Check your inbox and enter the code below">
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* Icon */}
+          <div
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: 12,
+              background: "#EEF2FF",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 4,
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="4" width="20" height="16" rx="2" stroke="#4F46E5" strokeWidth="1.5" />
+              <path d="M2 8l10 6 10-6" stroke="#4F46E5" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
           </div>
+
+          {email && (
+            <p style={{ margin: 0, color: "#64748B", fontSize: 13, lineHeight: 1.5 }}>
+              A verification code was sent to{" "}
+              <strong style={{ color: "#0F172A", fontWeight: 600 }}>{email}</strong>.
+            </p>
+          )}
+
+          <InputField
+            label="Verification code"
+            value={code}
+            onChange={setCode}
+            placeholder="6-digit code"
+            required
+          />
+
           <GlowBtn onClick={handleVerify} loading={loading}>
-            Verify Email →
+            Verify email
           </GlowBtn>
         </div>
       </FormCard>

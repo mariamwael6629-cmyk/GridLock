@@ -6,7 +6,18 @@ export default function ProtectedRoute({ children }) {
 
   if (initializing) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#020617", color: "#64748b", fontFamily: "Inter, system-ui, sans-serif" }}>
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#F8FAFC",
+          color: "#94A3B8",
+          fontFamily: "Inter, system-ui, sans-serif",
+          fontSize: 14,
+        }}
+      >
         Loading…
       </div>
     );

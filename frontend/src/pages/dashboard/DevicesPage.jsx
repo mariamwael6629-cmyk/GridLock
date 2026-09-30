@@ -24,20 +24,30 @@ export default function DevicesPage() {
   const handleRemove = async (device) => {
     try {
       const res = await api.removeDevice(device.id);
-      addToast(res.message || `${device.name} removed from trusted devices.`, "success");
+      addToast(res.message || `${device.name} removed.`, "success");
       loadDevices();
     } catch (err) {
       addToast(err.message, "error");
     }
   };
 
-  if (loading) return <p style={{ color: "#64748b" }}>Loading…</p>;
+  if (loading) return <p style={{ color: "#94A3B8", fontSize: 14 }}>Loading…</p>;
 
   return (
     <div>
-      <h2 style={{ margin: "0 0 24px", fontSize: 22, fontWeight: 800 }}>Trusted Devices</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {devices.length === 0 && <p style={{ color: "#64748b", fontSize: 13 }}>No devices yet.</p>}
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ margin: "0 0 4px", fontSize: 22, fontWeight: 700, letterSpacing: "-0.025em", color: "#0F172A" }}>
+          Trusted devices
+        </h1>
+        <p style={{ margin: 0, color: "#64748B", fontSize: 14 }}>
+          All devices that have accessed your account.
+        </p>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {devices.length === 0 && (
+          <p style={{ color: "#94A3B8", fontSize: 13 }}>No devices registered yet.</p>
+        )}
         {devices.map((d) => (
           <div
             key={d.id}
@@ -47,30 +57,79 @@ export default function DevicesPage() {
               justifyContent: "space-between",
               flexWrap: "wrap",
               gap: 12,
-              padding: "20px",
-              background: "rgba(255,255,255,0.02)",
-              border: `1px solid ${d.is_current ? "rgba(139,92,246,0.3)" : "rgba(255,255,255,0.06)"}`,
-              borderRadius: 14,
+              padding: "16px 20px",
+              background: "#FFFFFF",
+              border: `1px solid ${d.is_current ? "#C7D2FE" : "#E2E8F0"}`,
+              borderRadius: 12,
+              transition: "box-shadow 0.15s",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(99,102,241,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>🖥</div>
+            {/* Device info */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 10,
+                  background: d.is_current ? "#EEF2FF" : "#F8FAFC",
+                  border: `1px solid ${d.is_current ? "#C7D2FE" : "#E2E8F0"}`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <rect x="1" y="3" width="16" height="10" rx="2" stroke={d.is_current ? "#4F46E5" : "#94A3B8"} strokeWidth="1.25" />
+                  <path d="M5 17h8M9 13v4" stroke={d.is_current ? "#4F46E5" : "#94A3B8"} strokeWidth="1.25" strokeLinecap="round" />
+                </svg>
+              </div>
               <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontWeight: 700, fontSize: 15 }}>{d.name}</span>
-                  {d.is_current && <span style={{ background: "rgba(34,197,94,0.15)", color: "#22c55e", fontSize: 10, padding: "2px 8px", borderRadius: 99, fontWeight: 700 }}>CURRENT</span>}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "#0F172A" }}>{d.name}</span>
+                  {d.is_current && (
+                    <span
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 600,
+                        letterSpacing: "0.05em",
+                        color: "#4F46E5",
+                        background: "#EEF2FF",
+                        padding: "2px 7px",
+                        borderRadius: 4,
+                      }}
+                    >
+                      CURRENT
+                    </span>
+                  )}
                 </div>
-                <div style={{ color: "#64748b", fontSize: 13, marginTop: 2 }}>
-                  {d.browser} {d.os && `· ${d.os}`} {d.location && `· ${d.location}`}
+                <div style={{ fontSize: 12, color: "#94A3B8" }}>
+                  {[d.browser, d.os, d.location].filter(Boolean).join(" · ")}
                 </div>
               </div>
             </div>
+
+            {/* Last active + remove */}
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <span style={{ color: "#64748b", fontSize: 13 }}>{new Date(d.last_active).toLocaleString()}</span>
+              <span style={{ fontSize: 12, color: "#94A3B8" }}>
+                {new Date(d.last_active).toLocaleDateString()}
+              </span>
               {!d.is_current && (
                 <button
                   onClick={() => handleRemove(d)}
-                  style={{ padding: "6px 14px", borderRadius: 8, background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#f87171", cursor: "pointer", fontSize: 13 }}
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: 7,
+                    background: "transparent",
+                    border: "1px solid #FECACA",
+                    color: "#DC2626",
+                    cursor: "pointer",
+                    fontSize: 12,
+                    fontWeight: 500,
+                    transition: "background 0.12s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "#FEF2F2")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                 >
                   Remove
                 </button>

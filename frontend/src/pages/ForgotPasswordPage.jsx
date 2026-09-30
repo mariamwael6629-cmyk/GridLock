@@ -13,11 +13,11 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
 
   const handleForgotPassword = async () => {
-    if (!email) return addToast("Please enter your email.", "error");
+    if (!email) return addToast("Please enter your email address.", "error");
     setLoading(true);
     try {
       const res = await api.forgotPassword({ email });
-      addToast(res.message || "Reset link sent to your email.", "success");
+      addToast(res.message || "Reset code sent to your email.", "success");
       navigate("/reset-password", { state: { email } });
     } catch (err) {
       addToast(err.message, "error");
@@ -28,14 +28,21 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthLayout>
-      <FormCard title="Recover Access" subtitle="We'll send a reset code to your inbox">
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <InputField label="Email Address" type="email" value={email} onChange={setEmail} placeholder="you@example.com" icon="✉" required />
+      <FormCard title="Reset password" subtitle="Enter your email and we'll send you a reset code">
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <InputField
+            label="Email address"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            placeholder="you@example.com"
+            required
+          />
           <GlowBtn onClick={handleForgotPassword} loading={loading}>
-            Send Reset Code →
+            Send reset code
           </GlowBtn>
           <GlowBtn onClick={() => navigate("/login")} variant="ghost">
-            ← Back to Login
+            Back to sign in
           </GlowBtn>
         </div>
       </FormCard>
