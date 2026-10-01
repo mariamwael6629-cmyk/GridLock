@@ -29,7 +29,7 @@ export default function LoginPage() {
         setShowOTP(true);
       } else {
         loginWithToken(res.token.access_token, res.token.user);
-        addToast(`Welcome back, ${res.token.user.name}!`, "success");
+        addToast(`Welcome back, ${res.token.user.name}.`, "success");
         navigate("/dashboard");
       }
     } catch (err) {
@@ -44,7 +44,7 @@ export default function LoginPage() {
       const res = await api.verifyOtp({ email: pendingEmail, code });
       loginWithToken(res.access_token, res.user);
       setShowOTP(false);
-      addToast(`Welcome back, ${res.user.name}! 2FA verified.`, "success");
+      addToast(`Welcome back, ${res.user.name}.`, "success");
       navigate("/dashboard");
     } catch (err) {
       addToast(err.message, "error");
@@ -54,15 +54,15 @@ export default function LoginPage() {
   return (
     <AuthLayout>
       {showOTP && <OTPModal onVerify={handleOTPVerify} onClose={() => setShowOTP(false)} email={pendingEmail} />}
-      <FormCard title="Security Portal" subtitle="Authenticate to access your control center">
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+      <FormCard title="Sign in" subtitle="Enter your credentials to access your account">
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <InputField
-            label="Email Address"
+            label="Email address"
             type="email"
             value={form.email}
             onChange={(v) => setForm((p) => ({ ...p, email: v }))}
             placeholder="you@example.com"
-            icon="✉"
             required
             autoComplete="email"
           />
@@ -72,38 +72,45 @@ export default function LoginPage() {
             value={form.password}
             onChange={(v) => setForm((p) => ({ ...p, password: v }))}
             placeholder="••••••••"
-            icon="🔒"
             required
             autoComplete="current-password"
           />
+
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", color: "#94a3b8", fontSize: 13 }}>
-              <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} style={{ accentColor: "#8b5cf6" }} />
+            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", color: "#64748B", fontSize: 13 }}>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                style={{ accentColor: "#4F46E5", width: 14, height: 14 }}
+              />
               Remember me
             </label>
-            <Link to="/forgot-password" style={{ background: "none", border: "none", color: "#a78bfa", cursor: "pointer", fontSize: 13, fontWeight: 600, textDecoration: "none" }}>
+            <Link to="/forgot-password" style={{ color: "#4F46E5", fontSize: 13, fontWeight: 500, textDecoration: "none" }}>
               Forgot password?
             </Link>
           </div>
-          <div style={{ marginTop: 4 }}>
-            <GlowBtn onClick={handleLogin} loading={loading}>
-              Access Control Center →
-            </GlowBtn>
+
+          <GlowBtn onClick={handleLogin} loading={loading}>
+            Sign in
+          </GlowBtn>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ flex: 1, height: 1, background: "#E2E8F0" }} />
+            <span style={{ color: "#94A3B8", fontSize: 12, whiteSpace: "nowrap" }}>or continue with</span>
+            <div style={{ flex: 1, height: 1, background: "#E2E8F0" }} />
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, color: "#334155", fontSize: 12 }}>
-            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
-            Continue with
-            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
-          </div>
+
           <div style={{ display: "flex", gap: 8 }}>
             <SocialBtn icon="G" label="Google" />
             <SocialBtn icon="⌥" label="GitHub" />
             <SocialBtn icon="in" label="LinkedIn" />
           </div>
-          <p style={{ textAlign: "center", color: "#64748b", fontSize: 13, margin: 0 }}>
-            No account?{" "}
-            <Link to="/register" style={{ background: "none", border: "none", color: "#a78bfa", cursor: "pointer", fontWeight: 700, padding: 0, fontSize: 13, textDecoration: "none" }}>
-              Register
+
+          <p style={{ textAlign: "center", color: "#64748B", fontSize: 13, margin: 0 }}>
+            Don&apos;t have an account?{" "}
+            <Link to="/register" style={{ color: "#4F46E5", fontWeight: 600, textDecoration: "none" }}>
+              Create account
             </Link>
           </p>
         </div>

@@ -14,41 +14,90 @@ export default function ActivityPage() {
       .then((res) => !cancelled && setActivities(res))
       .catch((err) => addToast(err.message, "error"))
       .finally(() => !cancelled && setLoading(false));
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [addToast]);
 
-  if (loading) return <p style={{ color: "#64748b" }}>Loading…</p>;
+  if (loading) return <p style={{ color: "#94A3B8", fontSize: 14 }}>Loading…</p>;
 
   return (
     <div>
-      <h2 style={{ margin: "0 0 24px", fontSize: 22, fontWeight: 800 }}>Login Activity</h2>
-      <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1.5fr 1fr 80px", gap: 0, padding: "12px 20px", background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 12, color: "#64748b", fontWeight: 600, minWidth: 600, overflowX: "auto" }}>
-          <span>ACTION</span>
-          <span>DEVICE</span>
-          <span>LOCATION</span>
-          <span>TIME</span>
-          <span>STATUS</span>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ margin: "0 0 4px", fontSize: 22, fontWeight: 700, letterSpacing: "-0.025em", color: "#0F172A" }}>
+          Login activity
+        </h1>
+        <p style={{ margin: 0, color: "#64748B", fontSize: 14 }}>
+          All authentication events for your account.
+        </p>
+      </div>
+
+      <div
+        style={{
+          background: "#FFFFFF",
+          border: "1px solid #E2E8F0",
+          borderRadius: 12,
+          overflow: "hidden",
+        }}
+      >
+        {/* Table header */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.2fr 2fr 1.5fr 1.3fr 88px",
+            padding: "10px 20px",
+            background: "#F8FAFC",
+            borderBottom: "1px solid #E2E8F0",
+            fontSize: 11,
+            fontWeight: 600,
+            color: "#94A3B8",
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            minWidth: 580,
+          }}
+        >
+          <span>Action</span>
+          <span>Device</span>
+          <span>Location</span>
+          <span>Time</span>
+          <span>Status</span>
         </div>
-        {activities.length === 0 && <p style={{ color: "#64748b", fontSize: 13, padding: 20 }}>No activity yet.</p>}
+
+        {activities.length === 0 && (
+          <p style={{ color: "#94A3B8", fontSize: 13, padding: "20px" }}>No activity recorded yet.</p>
+        )}
+
         <div style={{ overflowX: "auto" }}>
-          {activities.map((a) => (
-            <div key={a.id} style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1.5fr 1fr 80px", gap: 0, padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.03)", fontSize: 14, alignItems: "center", minWidth: 600 }}>
-              <span style={{ fontWeight: 600 }}>{a.action}</span>
-              <span style={{ color: "#94a3b8" }}>{a.device}</span>
-              <span style={{ color: "#94a3b8" }}>{a.location}</span>
-              <span style={{ color: "#64748b", fontSize: 12 }}>{new Date(a.created_at).toLocaleString()}</span>
+          {activities.map((a, idx) => (
+            <div
+              key={a.id}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1.2fr 2fr 1.5fr 1.3fr 88px",
+                padding: "13px 20px",
+                borderBottom: idx < activities.length - 1 ? "1px solid #F1F5F9" : "none",
+                fontSize: 13,
+                alignItems: "center",
+                minWidth: 580,
+                transition: "background 0.1s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#FAFBFC")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              <span style={{ fontWeight: 500, color: "#0F172A" }}>{a.action}</span>
+              <span style={{ color: "#64748B" }}>{a.device}</span>
+              <span style={{ color: "#64748B" }}>{a.location}</span>
+              <span style={{ color: "#94A3B8", fontSize: 12 }}>{new Date(a.created_at).toLocaleString()}</span>
               <span
                 style={{
+                  display: "inline-block",
                   padding: "3px 10px",
-                  borderRadius: 6,
-                  background: a.status === "success" ? "rgba(34,197,94,0.15)" : "rgba(239,68,68,0.15)",
-                  color: a.status === "success" ? "#22c55e" : "#ef4444",
-                  fontSize: 12,
+                  borderRadius: 5,
+                  fontSize: 11,
                   fontWeight: 600,
+                  letterSpacing: "0.04em",
                   textAlign: "center",
+                  background: a.status === "success" ? "#ECFDF5" : "#FEF2F2",
+                  color: a.status === "success" ? "#059669" : "#DC2626",
+                  border: `1px solid ${a.status === "success" ? "#BBF7D0" : "#FECACA"}`,
                 }}
               >
                 {a.status === "success" ? "OK" : "BLOCKED"}

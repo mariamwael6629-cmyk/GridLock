@@ -1,71 +1,76 @@
 import { useState } from "react";
 
-export default function InputField({ label, type = "text", value, onChange, placeholder, icon, required, autoComplete }) {
+export default function InputField({ label, type = "text", value, onChange, placeholder, required, autoComplete }) {
   const [focused, setFocused] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const isPass = type === "password";
-  const hasValue = value && value.length > 0;
+
+  const borderColor = focused ? "#4F46E5" : "#E2E8F0";
+  const shadowStyle = focused ? "0 0 0 3px rgba(79,70,229,0.12)" : "none";
 
   return (
-    <div style={{ position: "relative", marginBottom: 4 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {label && (
+        <label
+          style={{
+            fontSize: 13,
+            fontWeight: 500,
+            color: "#374151",
+            letterSpacing: "-0.005em",
+          }}
+        >
+          {label}
+          {required && <span style={{ color: "#DC2626", marginLeft: 2 }}>*</span>}
+        </label>
+      )}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 10,
-          padding: "14px 16px",
-          background: "rgba(255,255,255,0.05)",
-          border: `1px solid ${focused ? "rgba(139,92,246,0.7)" : "rgba(255,255,255,0.1)"}`,
-          borderRadius: 12,
-          transition: "all 0.2s",
-          boxShadow: focused ? "0 0 0 3px rgba(139,92,246,0.15)" : "none",
+          background: "#FFFFFF",
+          border: `1px solid ${borderColor}`,
+          borderRadius: 8,
+          transition: "border-color 0.15s, box-shadow 0.15s",
+          boxShadow: shadowStyle,
+          overflow: "hidden",
         }}
       >
-        <span style={{ fontSize: 18, color: focused ? "#a78bfa" : "#64748b", flexShrink: 0 }}>{icon}</span>
-        <div style={{ flex: 1, position: "relative" }}>
-          <label
-            style={{
-              position: "absolute",
-              left: 0,
-              pointerEvents: "none",
-              transition: "all 0.2s",
-              fontSize: focused || hasValue ? 10 : 14,
-              top: focused || hasValue ? -6 : "50%",
-              transform: focused || hasValue ? "none" : "translateY(-50%)",
-              color: focused ? "#a78bfa" : "#64748b",
-              fontWeight: 500,
-            }}
-          >
-            {label}
-            {required && " *"}
-          </label>
-          <input
-            type={isPass && showPass ? "text" : type}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            placeholder={focused ? placeholder : ""}
-            autoComplete={autoComplete}
-            style={{
-              background: "transparent",
-              border: "none",
-              outline: "none",
-              width: "100%",
-              color: "#f1f5f9",
-              fontSize: 14,
-              paddingTop: focused || hasValue ? 8 : 0,
-              paddingBottom: 0,
-            }}
-          />
-        </div>
+        <input
+          type={isPass && showPass ? "text" : type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          style={{
+            flex: 1,
+            background: "transparent",
+            border: "none",
+            outline: "none",
+            padding: "10px 14px",
+            fontSize: 14,
+            color: "#0F172A",
+            letterSpacing: "-0.005em",
+          }}
+        />
         {isPass && (
           <button
             type="button"
             onClick={() => setShowPass(!showPass)}
-            style={{ background: "none", border: "none", cursor: "pointer", color: "#64748b", fontSize: 16, padding: 0, flexShrink: 0 }}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#94A3B8",
+              padding: "0 12px",
+              fontSize: 13,
+              fontWeight: 500,
+              flexShrink: 0,
+              letterSpacing: "-0.01em",
+            }}
           >
-            {showPass ? "🙈" : "👁"}
+            {showPass ? "Hide" : "Show"}
           </button>
         )}
       </div>

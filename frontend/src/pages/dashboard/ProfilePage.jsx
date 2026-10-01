@@ -6,6 +6,13 @@ import InputField from "../../components/InputField.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useToast } from "../../context/ToastContext.jsx";
 
+const CARD = {
+  background: "#FFFFFF",
+  border: "1px solid #E2E8F0",
+  borderRadius: 12,
+  padding: 24,
+};
+
 export default function ProfilePage() {
   const { user, setUser, logout } = useAuth();
   const { addToast } = useToast();
@@ -44,34 +51,120 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <h2 style={{ margin: "0 0 24px", fontSize: 22, fontWeight: 800 }}>Profile Settings</h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-        <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: 24 }}>
-          <h3 style={{ margin: "0 0 20px", fontSize: 16 }}>Personal Information</h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <InputField label="Full Name" value={form.name} onChange={(v) => setForm((p) => ({ ...p, name: v }))} icon="👤" placeholder="Your name" />
-            <InputField label="Email Address" type="email" value={form.email} onChange={(v) => setForm((p) => ({ ...p, email: v }))} icon="✉" placeholder="your@email.com" />
-            <GlowBtn onClick={handleSave} loading={saving}>
-              Save Changes
-            </GlowBtn>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ margin: "0 0 4px", fontSize: 22, fontWeight: 700, letterSpacing: "-0.025em", color: "#0F172A" }}>
+          Profile
+        </h1>
+        <p style={{ margin: 0, color: "#64748B", fontSize: 14 }}>
+          Manage your personal information and account settings.
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 280px",
+          gap: 16,
+          alignItems: "start",
+        }}
+      >
+        {/* Edit form */}
+        <div style={CARD}>
+          <h3 style={{ margin: "0 0 20px", fontSize: 15, fontWeight: 600, color: "#0F172A" }}>Personal information</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <InputField
+              label="Full name"
+              value={form.name}
+              onChange={(v) => setForm((p) => ({ ...p, name: v }))}
+              placeholder="Your name"
+            />
+            <InputField
+              label="Email address"
+              type="email"
+              value={form.email}
+              onChange={(v) => setForm((p) => ({ ...p, email: v }))}
+              placeholder="your@email.com"
+            />
+            <div>
+              <GlowBtn onClick={handleSave} loading={saving} full={false}>
+                Save changes
+              </GlowBtn>
+            </div>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: 24, textAlign: "center" }}>
-            <div style={{ width: 80, height: 80, borderRadius: 20, background: "linear-gradient(135deg,#6366f1,#8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, fontWeight: 800, margin: "0 auto 12px" }}>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* Avatar card */}
+          <div style={{ ...CARD, textAlign: "center" }}>
+            <div
+              style={{
+                width: 72,
+                height: 72,
+                borderRadius: 18,
+                background: "#4F46E5",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 24,
+                fontWeight: 700,
+                color: "#FFFFFF",
+                margin: "0 auto 14px",
+                letterSpacing: "-0.02em",
+              }}
+            >
               {user?.avatar}
             </div>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>{user?.name}</div>
-            <div style={{ color: "#64748b", fontSize: 13, marginBottom: 12 }}>{user?.email}</div>
-            <span style={{ background: "rgba(139,92,246,0.2)", color: "#a78bfa", padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 700 }}>{user?.role}</span>
+            <div style={{ fontWeight: 600, fontSize: 15, color: "#0F172A", marginBottom: 2 }}>{user?.name}</div>
+            <div style={{ color: "#94A3B8", fontSize: 12, marginBottom: 10 }}>{user?.email}</div>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+                color: "#4F46E5",
+                background: "#EEF2FF",
+                padding: "3px 10px",
+                borderRadius: 4,
+              }}
+            >
+              {user?.role}
+            </span>
           </div>
-          <div style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.15)", borderRadius: 16, padding: 20 }}>
-            <h4 style={{ margin: "0 0 10px", color: "#f87171", fontSize: 14 }}>Danger Zone</h4>
+
+          {/* Danger zone */}
+          <div
+            style={{
+              background: "#FFFBFB",
+              border: "1px solid #FECACA",
+              borderRadius: 12,
+              padding: 20,
+            }}
+          >
+            <h4 style={{ margin: "0 0 6px", fontSize: 13, fontWeight: 600, color: "#DC2626" }}>
+              Danger zone
+            </h4>
+            <p style={{ margin: "0 0 14px", fontSize: 12, color: "#94A3B8", lineHeight: 1.5 }}>
+              Permanently delete your account and all associated data.
+            </p>
             <button
               onClick={handleDelete}
-              style={{ width: "100%", padding: "10px", borderRadius: 10, background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#f87171", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
+              style={{
+                width: "100%",
+                padding: "9px",
+                borderRadius: 7,
+                background: "transparent",
+                border: "1px solid #FECACA",
+                color: "#DC2626",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: 500,
+                transition: "background 0.12s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#FEF2F2")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              Delete Account
+              Delete account
             </button>
           </div>
         </div>
